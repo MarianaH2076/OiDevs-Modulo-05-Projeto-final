@@ -1,26 +1,44 @@
-const cars = require("../dao/carsDao")
+const connDb = require("../infra/connection");
+const Car = require("../dao/carsDao");
 
 exports.createOne = (req, res) => {
-    res.send("CREATE");
-    cars.save();
+   Car.create(req.body, (err) => {
+    if(!err) {
+        res.send({});
+    } else {
+        res.send({err});
+    }
+   })
 }
 
 exports.getOne = (req, res) => {
-    res.send(`GET ONE: ${req.params.id}`);
-    cars.findOne();
+    Car.findOne(req.params.id, (err, data) => {
+        if(data) {
+            res.status(200).send(data);
+        } else {
+            res.status(404).send({err: "Car not found"});
+        }
+    })
 }
 
 exports.getAll = (req, res) => {
-    res.send("GET ALL");
-    cars.findAll();
+    Car.findAll((err, data) => res.send(data));
+    //por que precisa colocar o err como parâmetro também?
 }
 
 exports.updateOne = (req, res) => {
-    res.send(`UPDATE ONE: ${req.params.id}`);
-    cars.update();
+    //se der erro, pode ser aqui!
+    Car.update(req.params.id, req.body, (err) => {
+        if(err){
+            res.status(404).send({msg: err});
+        } else {
+            res.status(200).end();
+        }
+    })
 }
 
 exports.deleteOne = (req, res) => {
-    res.send(`DELETE ONE: ${req.params.id}`);
-    cars.delete();
+    Car.delete(req.params.id, (err) => {
+        if(!err) res.status(204).end();
+    })
 }

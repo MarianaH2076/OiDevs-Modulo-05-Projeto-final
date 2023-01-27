@@ -2,11 +2,14 @@ const express = require('express');
 const router = express.Router();
 const carsCtrl = require("../controllers/carsControllers")
 
+//conectando com o banco de dados
+
+
 // Create a car (POST)
 router.post('/', carsCtrl.createOne);
 
 // Retrieve all cars (GET)
-router.get('/', carsCtrl.getAll);
+router.get("/", carsCtrl.getAll);
 
 //Retrieve one car (GET by id)
 router.get('/:id', carsCtrl.getOne);
